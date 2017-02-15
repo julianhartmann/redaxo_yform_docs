@@ -71,10 +71,10 @@ Zum Beispiel so:
 
 ```
 <?php
-$sql = rex_sql::factory()
-$query = 'SELECT * FROM ' . rex::getTable('news_beitrag') . ' JOIN ' . rex::getTable('news_tag') . ' ON ' . rex::getTable('news_beitrag') . '.id_tag = ' . rex::getTable('news_tag') . '.id ';
+$sql = rex_sql::factory();
+$query = 'SELECT * FROM ' . rex::getTable('news_beitrag') . ' JOIN ' . rex::getTable('news_tag') . ' ON ' . rex::getTable('news_beitrag') . '.id_tag = ' . rex::getTable('news_tag') . '.id';
 $sql->setQuery($query);
-foreach($sql->getArray as $row) {
+foreach($sql->getArray() as $row) {
 	echo '<h1>' . $row['titel'] . '</h1>';
 	echo '<p>' . $row['text'] . '</p>';
 	echo '<p>Tag: ' . $row['name'] . '</p>';
@@ -162,14 +162,14 @@ Im Frontend kann das ganze dann beispielsweise so abgefragt werden:
 
 ```
 <?php
-$sql = rex_sql::factory()
-$query = 'SELECT ' . rex::getTable('news_beitrag') . '.*, GROUP_CONCAT(news_tag.name SEPARATOR ',') AS tags ';
+$sql = rex_sql::factory();
+$query = 'SELECT ' . rex::getTable('news_beitrag') . '.*, GROUP_CONCAT(' . rex::getTable('news_tag') . '.name SEPARATOR \',\') AS tags ';
 $query.= 'FROM ' . rex::getTable('news_beitrag') . ' ';
 $query.= 'JOIN ' . rex::getTable('news_tag_beitrag') . ' ON ' . rex::getTable('news_beitrag') . '.id = ' . rex::getTable('news_tag_beitrag') . '.id_beitrag ';
 $query.= 'JOIN ' . rex::getTable('news_tag') . ' ON ' . rex::getTable('news_tag') . '.id = ' . rex::getTable('news_tag_beitrag') . '.id_tag ';
-$query.= 'GROUP BY news_beitrag.id';
+$query.= 'GROUP BY ' . rex::getTable('news_beitrag') . '.id';
 $sql->setQuery($query);
-foreach($sql->getArray as $row) {
+foreach($sql->getArray() as $row) {
 	echo '<h1>' . $row['titel'] . '</h1>';
 	echo '<p>' . $row['text'] . '</p>';
 	echo '<p>Tags: ' . $row['tags'] . '</p>';
